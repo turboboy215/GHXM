@@ -1,0 +1,124 @@
+Driver Information
+=======================================
+The driver always begins at the start of a bank with several jump commands. Following this is a string in ASCII which gives information about the driver version with a date and credits. Some examples are seen below:
+
+Early version (from GHX example ROMs, no version listed):
+GHX Audio Engine (c) 1999 Martin Wodok. All rights reserved.
+
+Another early version:
+GHX Sound Engine v1026 (c) 1999 Martin Wodok. All rights reserved.
+
+Later version (seen in Jimmy White's Cueball, Blue's Clues, and several others):
+GHX Sound Engine
+   Ver.00530    
+(c) 2000 SHIN´EN
+ Code: M. Wodok 
+Music: M.Linzner
+
+Prince Naseem Boxing is the only game to have a 2001 date, despite using an earlier version of the driver than other games released in 2001 (e.g. SpongeBob SquarePants and Spider-Man 2) which have a 2000 date. The most commonly reported driver versions are Ver.00530 and Ver.01206t, the latter which appears to be the latest version of the driver released. v2.0207 also has a URL to Shin'en's website, www.shinen.com. The first Tomb Raider actually has two versions of the sound data, one which uses v2.0207 and the other which uses v00218; however, it is unknown which version is used by the game. The GBS rip uses the v00218 version.
+
+Frequency Table (Channels 1-3)
+=======================================
+Immediately following the code is a standard frequency table of 16-bit values. This is loaded via the following instructions:
+
+ld hl, FreqTable
+    add hl, bc
+    add hl, bc
+    ld c, $00
+
+Frequency Table (Channel 4)
+=======================================
+This is a table for frequency values of channel 4 (noise).
+
+Vibrato Table
+=======================================
+After the noise channel table is a series of values determining patterns for vibrato. Each entry is 10 bytes. The numbers are signed (e.g. FF is -1).
+
+Sample Timer Settings
+=======================================
+Following this is yet another table which contains three 32-bit values relating to timer values to use during sample playback.
+
+Bytes:
+1. Timer modulo (11100000 or 11110000)
+2. Timer control (0100 or 0111)
+3. DAC rate (if bit 1 set, then 16khz, otherwise 8khz)
+4. Playback rate for NR34 (always 87 = 256hz)
+
+The GHX "Header"
+=======================================
+Following the sampler timer settings is a pointer leading to the GHX "header" which immediately is followed by the header itself. The information from the header is copied into RAM.
+
+Bytes:
+1-3 = The identifier "GHX" in ASCII
+4 = Number of songs
+5 = Number of rows per pattern (appears to be either 10 (16) or 20 (32))
+6 = Unknown (always set to 0?)
+7-8 = Pointer to song data table
+9-10 = Pointer to instrument data table
+11-12 = Pointer to pattern data table
+
+Song Data Format
+=======================================
+Next is a pattern defining the structure of each song:
+
+Bytes:
+1 = Number of sequence (starting from 0)
+2-3 = Address to starting sequence
+4 = Loop point sequence relative to final sequence (e.g. 16 from 19 = pattern 3) (starting from 0)
+5-6 = Address of loop point sequence
+
+
+Sequence Mapping Format
+=======================================
+Immediately following the table is the mapping of every channel for each sequence of a song, based on the pointers for channel patterns from the table later on. Each sequence consists of 7 bytes:
+1. Channel 1 mapping
+2. Channel 1 transpose
+3. Channel 2 mapping
+4. Channel 2 transpose
+5. Channel 3 mapping
+6. Channel 3 transpose
+7. Channel 4 mapping
+
+Pattern Data Table Table
+=======================================
+As called from the header, what follows immediately is the pattern table, which consists of 16-bit pointers.
+
+Instrument Table
+=======================================
+Next, also called from the header, is the instrument table, which consists of 16-bit pointers.
+
+The Instrument Format
+=======================================
+Start bytes:
+1 = Sweep size
+2 = Speed
+3 = Starting volume?
+
+Other parameters:
+
+00 = Do nothing for a step?
+xx yy = Effect/new volume + parameters?
+Cx = Sweep
+8x = Arpeggio
+
+The Pattern Format
+=======================================
+Each pattern is either 16 or 32 rows, depending on the information in the "header". Each "row" of the pattern for every channel is 1-3 bytes long, depending on the event.
+
+Bytes:
+00 = Empty row
+01-3F = Pitch slide (e.g.: 20 = + 4)
+40 x0 = Change volume (C0 = 0, 80 = less?, works from 00 to 40 on channel 3)
+41-7F xx = Note/instrument
+80 xF = Change speed/Ticks amount
+81-BF xx = Higher notes for drums?/instrument
+C0-FF xx yF = Note/instrument, Change speed/Ticks amount
+
+Waveform Data
+=======================================
+The waveform data immediately follows the pattern data. These are referenced by the instruments.
+
+TBA:
+=======================================
+ - Figure out the instrument format more.
+ - Figure out the sound effects format.
