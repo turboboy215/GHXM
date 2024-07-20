@@ -19,7 +19,7 @@ This tool was based on my own reverse-engineering of the sound engine, with litt
 
 Also included is another program, GHX2TXT, which prints out information about the song data from each game. This is essentially a prototype of GHXM, similar to MC2TXT. Do not delete the xmdata.dat file! It is necessary for XM conversions.
 
-The following is a list of theoretically compatible games, although not all games have been tested:
+Supported games:
   * AMF Bowling
   * Astérix: Search for Dogmatix
   * Barbie: Magic Genie Adventure
