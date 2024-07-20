@@ -31,7 +31,7 @@ Supported games:
   * Fix & Foxi Episode 1: Lupo
   * Hoyle Card Games
   * Jimmy White's Cueball
-  * Kaept'n Blaubaer: Die verrueckte Schatzsuche
+  * Käpt'n Blaubär: Die verrückte Schatzsuche
   * Le Mans 24 Hours
   * NASCAR Heat
   * NBA Jam 2001
