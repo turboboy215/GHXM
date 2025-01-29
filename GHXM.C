@@ -17,7 +17,7 @@ int trFix = 0;
 char outfile[1000000];
 long bankAmt;
 int numSongs = 0;
-int curSong = 0;
+int songNum = 0;
 int patRows = 0;
 long songTable = 0;
 long insTable = 0;
@@ -182,12 +182,12 @@ int main(int args, char* argv[])
 					getSongTitles(songNames);
 
 					i = songTable;
-					for (curSong = 1; curSong <= numSongs; curSong++)
+					for (songNum = 1; songNum <= numSongs; songNum++)
 					{
-						printf("\nSong %i:\n", curSong);
+						printf("\nSong %i:\n", songNum);
 						if (songNames[0][0] != '\0')
 						{
-							printf("Title: %s\n", songNames[curSong - 1]);
+							printf("Title: %s\n", songNames[songNum - 1]);
 						}
 						songInfo[0] = romData[i - bankAmt] + 1;
 						printf("Number of patterns: %i\n", songInfo[0]);
@@ -199,7 +199,7 @@ int main(int args, char* argv[])
 						printf("Pattern loop address: 0x%04X\n", songInfo[3]);
 						if (songInfo[0] < 128)
 						{
-							song2xm(curSong, songInfo);
+							song2xm(songNum, songInfo);
 						}
 						else
 						{
@@ -274,7 +274,7 @@ void song2xm(int songNum, long info[4])
 		xmPos += 17;
 		if (songNames[0][0] != '\0')
 		{
-			sprintf((char*)&xmData[xmPos], songNames[curSong-1]);
+			sprintf((char*)&xmData[xmPos], songNames[songNum-1]);
 		}
 		else
 		{
